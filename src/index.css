@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .topbar-divisor {
+        border-bottom-width: 1px;
+    }
+}
