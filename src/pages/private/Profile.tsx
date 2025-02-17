@@ -113,7 +113,7 @@ export const Profile = () => {
                     <button 
                         type="button"
                         onClick={logout}
-                        className="flex items-center justify-center bg-fuchsia-500 w-full text-lg text-white py-2 px-4 rounded hover:bg-fuchsia-800 transition-colors mt-2"
+                        className="flex items-center justify-center bg-red-500 w-full text-lg text-white py-2 px-4 rounded hover:bg-red-800 transition-colors mt-2"
                     >
                         <LuDoorOpen className="mr-2" /> Sair
                     </button>
