@@ -5,24 +5,41 @@ import { Profile } from './pages/private/Profile';
 import { Forms } from './pages/private/Forms';
 import { Home } from './pages/private/Home';
 import { Register } from './pages/public/Register';
+import { AuthProvider } from './contexts/AuthContext';
+import { PrivateRoute } from './config/PrivateRoute';
 
 
 function App() {
-
   return (
-    <>
-      {/* Public Routes */}
+    <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Layout><Home /></Layout>} />
-          <Route path="/forms" element={<Layout><Forms /></Layout>} />
-          <Route path="/profile" element={<Layout><Profile /></Layout>} />
-          <Route path='/login' element={<Login/>} />
-          <Route path='/register' element={<Register/>} />
+          <Route path="/" element={
+            <PrivateRoute>
+              <Layout>
+                <Home />
+              </Layout>
+            </PrivateRoute>
+          } />
+          <Route path="/forms" element={
+            <PrivateRoute>
+              <Layout>
+                <Forms />
+              </Layout>
+            </PrivateRoute>
+          } />
+          <Route path="/profile" element={
+            <PrivateRoute>
+              <Layout>
+                <Profile />
+              </Layout>
+            </PrivateRoute>
+          } />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
         </Routes>
       </Router>
-      
-    </>
+    </AuthProvider>
   )
 }
 

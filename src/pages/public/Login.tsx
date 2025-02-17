@@ -1,53 +1,80 @@
 import { LuArrowRightToLine } from "react-icons/lu"
 import { TopBarWithoutMenu } from "../../components/topbar/TopBarWithoutMenu"
-import { NavLink } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import { TextField } from "../../components/inputs/TextField"
+import { ButtonForPublicRoutes } from "../../components/buttons/ButtonForPublicRoutes"
+import { TitleForPublicRoutes } from "../../components/titles/TitleForPublicRoutes"
+import { MessagesLoginOrRegister } from "../../components/tips/MessagesLoginOrRegister"
+import { toast, ToastContainer } from "react-toastify"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { loginSchema, LoginSchemaType } from "../../validators/LoginValidator"
+import { useCallback, useEffect } from "react"
+import { LoginService } from "../../services/LoginService"
+import { useAuth } from "../../hooks/useAuth"
 
 
 export const Login = () => {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    const {
+            register,
+            handleSubmit,
+            formState: { errors },
+        } = useForm<LoginSchemaType>({
+            resolver: zodResolver(loginSchema),
+        });
+    const location = useLocation();
+
+    useEffect(() => {
+        const isRegisterSuccessful: boolean = location.state?.status === 201
+        
+        if(isRegisterSuccessful) {
+            toast.success(location.state?.message);
+        }
+    }, [location])
+
+    const onSubmit = useCallback(async (data: LoginSchemaType) => {
+        const loginService = new LoginService();
+        const response = await loginService.login(data).catch((error) => {
+            if(error.status === 401) {
+                toast.error("Credenciais incorretas.")
+            } else {
+                toast.error("Algo deu errado.")
+            }
+        })
+        
+        if(response?.status === 200) {
+            login({
+                userId: response.data.userId,
+                token: response.data.token,
+                name: response.data.name,
+                lastname: response.data.lastname,
+                email: response.data.email
+            });
+
+
+            navigate('/');
+        }
+    }, [login, navigate]);
 
     return (
-        <main className="">
-            <div className="topbar-divisor shadow-md">
-                <TopBarWithoutMenu />  
-            </div>
-            <div className="m-5 flex justify-center">
-                <h2
-                    className="text-slate-900 text-lg font-bold"
-                >
-                    Login
-                </h2>
-            </div>
+        <main>
+            <ToastContainer />
+            <TopBarWithoutMenu />  
 
-            <div className="m-5">
-                <h3 className="text-slate-900 text-base font-bold">Email</h3>
-                <label>
-                    <input
-                        type="text"
-                        placeholder=""
-                        className="border-2 bg-slate-100 rounded-lg pt-2 pb-2 pl-2 w-full mt-2"
-                    />
-                </label>
-            </div>
-            <div className="m-5">
-                <h3 className="text-slate-900 text-base font-bold">Senha</h3>
-                <label>
-                    <input
-                        type="password"
-                        placeholder=""
-                        className="border-2 bg-slate-100 rounded-lg pt-2 pb-2 pl-2 w-full mt-2"
-                    />
-                </label>
-            </div>
-            <div className="m-5">
-                <button className="flex items-center justify-center bg-slate-700 w-full text-lg text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors">
-                    <LuArrowRightToLine className="mr-2" /> Entrar
-                </button>
-            </div>
-            <div className="flex justify-center">
-                <p className="text-slate-900">
-                    Não possui uma conta ainda? <NavLink to={"/register"} className={`text-blue-500 underline`}>Crie aqui.</NavLink>
-                </p>
-            </div>
+            <TitleForPublicRoutes title="Login"/>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <TextField register={register} type="email" label="Email" inputName="email" error={errors.email}/>
+                
+                <TextField register={register} type="password" label="Senha" inputName="password" error={errors.password}/>
+
+                <ButtonForPublicRoutes name="Entrar">
+                    <LuArrowRightToLine className="mr-2" />
+                </ButtonForPublicRoutes>
+            </form>
+
+            <MessagesLoginOrRegister redirectText="Crie aqui" redirectTo="/register" text="Não possui uma conta ainda?" />
         </main>
     )
 }
