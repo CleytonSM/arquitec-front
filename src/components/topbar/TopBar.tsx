@@ -11,11 +11,11 @@ export const TopBar = () => {
         setMenuOpen((prev) => !prev)
     }
     return (
-        <>
+        <main>
             <div className="flex m-4">
                 <h1 className="grow hover:text-slate-500 transition-colors text-slate-900 text-2xl font-bold">
                     <Link to="/">
-                        ArquiTec
+                        Arquinina
                     </Link>
                 </h1>
                 <RxTextAlignJustify 
@@ -24,6 +24,6 @@ export const TopBar = () => {
             </div>
 
             <Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}/>
-        </>
+        </main>
     )
 }
