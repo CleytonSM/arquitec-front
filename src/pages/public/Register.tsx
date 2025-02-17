@@ -1,80 +1,113 @@
 import { LuArrowRightToLine } from "react-icons/lu"
 import { TopBarWithoutMenu } from "../../components/topbar/TopBarWithoutMenu"
+import { TitleForPublicRoutes } from "../../components/titles/TitleForPublicRoutes"
+import { TextField } from "../../components/inputs/TextField"
+import { ButtonForPublicRoutes } from "../../components/buttons/ButtonForPublicRoutes"
+import { MessagesLoginOrRegister } from "../../components/tips/MessagesLoginOrRegister"
+import { useForm } from "react-hook-form"
+import { registerSchema, RegisterSchemaType } from "../../validators/RegisterValidator"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useCallback } from "react"
+import { RegisterService } from "../../services/RegisterService"
+import { useNavigate } from "react-router-dom"
+import { toast, ToastContainer } from "react-toastify"
+import { EnhancedTextField } from "../../components/inputs/EnhancedTextField"
 
 export const Register = () => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<RegisterSchemaType>({
+        resolver: zodResolver(registerSchema),
+    });
+
+    const navigate = useNavigate();
+    
+    
+    const onSubmit = useCallback(async (data: RegisterSchemaType) => {
+        const registerService = new RegisterService();
+        const response = await registerService.register(data).catch((error) => {
+            if(error.status === 409) {
+                toast.error("Este email já está em uso.")
+            } else {
+                toast.error("Algo de errado ocorreu.")
+            }
+
+            throw error;
+        });
+
+
+        if(response.status === 201) {
+            navigate("/login", {
+                state: {
+                    status: response.status,
+                    message: "Conta criada com sucesso, agora verifique seu e-mail para ativá-la!"
+                }
+            })
+        }
+        
+    }, [navigate])
+    
     return (
-        <main className="">
-            <div className="topbar-divisor shadow-md">
-                <TopBarWithoutMenu />  
-            </div>
-            <div className="m-5 flex justify-center">
-                <h2
-                    className="text-slate-900 text-lg font-bold"
-                >
-                    Registrar
-                </h2>
-            </div>
+        <main>
+            <ToastContainer />
+            <TopBarWithoutMenu />
+            <TitleForPublicRoutes title="Register" />
 
-            <div className="m-5">
-                <h3 className="text-slate-900 text-base font-bold">Nome</h3>
-                <label>
-                    <input
-                        type="text"
-                        placeholder=""
-                        className="border-2 bg-slate-100 rounded-lg pt-2 pb-2 pl-2 w-full mt-2"
-                    />
-                </label>
-            </div>
-            
-            <div className="m-5">
-                <h3 className="text-slate-900 text-base font-bold">Sobrenome</h3>
-                <label>
-                    <input
-                        type="text"
-                        placeholder=""
-                        className="border-2 bg-slate-100 rounded-lg pt-2 pb-2 pl-2 w-full mt-2"
-                    />
-                </label>
-            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <TextField
+                    type="text"
+                    label="Nome"
+                    inputName="name"
+                    error={errors.name}
+                    register={register}
+                />
 
-            <div className="m-5">
-                <h3 className="text-slate-900 text-base font-bold">Email</h3>
-                <label>
-                    <input
-                        type="text"
-                        placeholder=""
-                        className="border-2 bg-slate-100 rounded-lg pt-2 pb-2 pl-2 w-full mt-2"
-                    />
-                </label>
-            </div>
+                <TextField
+                    type="text"
+                    label="Sobrenome"
+                    inputName="lastname"
+                    error={errors.lastname}
+                    register={register}
+                />
 
-            <div className="m-5">
-                <h3 className="text-slate-900 text-base font-bold">Senha</h3>
-                <label>
-                    <input
-                        type="password"
-                        placeholder=""
-                        className="border-2 bg-slate-100 rounded-lg pt-2 pb-2 pl-2 w-full mt-2"
-                    />
-                </label>
-            </div>
+                <TextField
+                    type="email"
+                    label="Email"
+                    inputName="email"
+                    error={errors.email}
+                    register={register}
+                />
 
-            <div className="m-5">
-                <h3 className="text-slate-900 text-base font-bold">Confirmar Senha</h3>
-                <label>
-                    <input
-                        type="password"
-                        placeholder=""
-                        className="border-2 bg-slate-100 rounded-lg pt-2 pb-2 pl-2 w-full mt-2"
-                    />
-                </label>
-            </div>
+                <EnhancedTextField
+                    type="password"
+                    label="Senha"
+                    inputName="password"
+                    error={errors.password}
+                    register={register}
+                    showRequirements={true}
+                />
 
-            <div className="m-5">
-                <button className="flex items-center justify-center bg-slate-700 w-full text-lg text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors">
-                    <LuArrowRightToLine className="mr-2" /> Registrar
-                </button>
-            </div>
+                <EnhancedTextField
+                    type="password"
+                    label="Confirmar Senha"
+                    inputName="confirmPassword"
+                    error={errors.confirmPassword}
+                    register={register}
+                    showRequirements={false}
+                />
+
+                <ButtonForPublicRoutes name="Registrar">
+                    <LuArrowRightToLine className="mr-2" />
+                </ButtonForPublicRoutes>
+            </form>
+
+            <MessagesLoginOrRegister
+                redirectText="Login"
+                redirectTo="/login"
+                text="Já tem uma conta?"
+            />
         </main>
-    )
-}
+    );
+};

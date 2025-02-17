@@ -1,4 +1,4 @@
-import { LuHouse, LuNotepadText, LuUserRound } from "react-icons/lu";
+import { LuCircleX, LuHouse, LuNotepadText, LuUserRound } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 
 interface MenuProps {
@@ -14,7 +14,7 @@ export const Menu = ({ isOpen, onClose }: MenuProps) => {
       } transition-transform duration-300 ease-in-out`}
     >
       <button onClick={onClose} className="m-4 text-xl">
-        X
+        <LuCircleX className="text-2xl"/>
       </button>
       <nav className="flex flex-col items-start p-4 space-y-4">
         <NavLink
