@@ -1,13 +1,14 @@
 import { LuDoorOpen, LuSend } from "react-icons/lu";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 import { useForm } from "react-hook-form";
-import { userInfoSchema, UserInfoSchemaType } from "../../validators/UserInfoValidator";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextField } from "../../components/inputs/TextField";
+import { TextField } from "../../../components/inputs/TextField";
 import { toast, ToastContainer } from "react-toastify";
 import { useCallback } from "react";
-import { UserService } from "../../services/UserService";
-import { TitleForPrivateRoutes } from "../../components/titles/TitleForPrivateRoutes";
+import { UserService } from "../../../services/UserService";
+import { TitleForPrivateRoutes } from "../../../components/titles/TitleForPrivateRoutes";
+import { userInfoSchema, UserInfoSchemaType } from "../../../validators/UserInfoValidator";
 
 export const Profile = () => {
     const { user, logout, login } = useAuth();
@@ -33,7 +34,6 @@ export const Profile = () => {
             return;
         }
 
-        
         const userService = new UserService;
         const response = await userService.update(user?.token, data).catch((error) => {
             if(error.status === 409) {

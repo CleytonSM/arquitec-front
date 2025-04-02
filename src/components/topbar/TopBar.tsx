@@ -15,7 +15,7 @@ export const TopBar = () => {
             <div className="flex m-4">
                 <h1 className="grow hover:text-slate-500 transition-colors text-slate-900 text-2xl font-bold">
                     <Link to="/">
-                        Arquinina
+                        ARQNina
                     </Link>
                 </h1>
                 <RxTextAlignJustify 

@@ -6,7 +6,7 @@ export const TopBarWithoutMenu = () => {
             <div className="topbar-divisor shadow-md">
                 <div className="flex m-4">
                     <h1 className="grow text-slate-900 text-2xl font-bold">
-                        Arquinina
+                        ARQNina
                     </h1>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import { LuSearch } from "react-icons/lu"
-import { TitleForPrivateRoutes } from "../../components/titles/TitleForPrivateRoutes"
+import { TitleForPrivateRoutes } from "../../../components/titles/TitleForPrivateRoutes" 
 
 
 export const Forms = () => {

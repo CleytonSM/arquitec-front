@@ -1,0 +1,10 @@
+export enum MaritalStatus {
+    SINGLE = "SINGLE",
+    MARRIED = "MARRIED",
+    SEPARATED = "SEPARATED",
+    DIVORCED = "DIVORCED",
+    WIDOWED = "WIDOWED",
+    CIVIL_UNION = "CIVIL_UNION",
+    PARTNER = "PARTNER",
+    ENGAGED = "ENGAGED"
+}

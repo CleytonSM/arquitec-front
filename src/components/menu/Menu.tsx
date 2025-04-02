@@ -1,4 +1,4 @@
-import { LuCircleX, LuHouse, LuNotepadText, LuUserRound } from "react-icons/lu";
+import { LuCircleX, LuClipboardPlus, LuHouse, LuNotepadText, LuUserRound } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 
 interface MenuProps {
@@ -34,7 +34,7 @@ export const Menu = ({ isOpen, onClose }: MenuProps) => {
         >
           <section className="flex items-center">
             <LuNotepadText className="text-2xl mr-2" />
-            <p>Forms</p>
+            <p>Formulários</p>
           </section>
         </NavLink>
         <NavLink
@@ -43,7 +43,16 @@ export const Menu = ({ isOpen, onClose }: MenuProps) => {
           className={({isActive}) => `text-lg flex ${isActive ? "text-slate-500" : ""}`}>
           <section className="flex items-center">
             <LuUserRound className="text-2xl mr-2" />
-            <p>Profile</p>
+            <p>Perfil</p>
+          </section>
+        </NavLink>
+        <NavLink
+          to="/information"
+          onClick={onClose}
+          className={({isActive}) => `text-lg flex ${isActive ? "text-slate-500" : ""}`}>
+          <section className="flex items-center">
+            <LuClipboardPlus className="text-2xl mr-2" />
+            <p>Informações</p>
           </section>
         </NavLink>
       </nav>
